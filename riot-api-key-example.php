@@ -1,0 +1,1 @@
+<?php $riot_api_key = "INSERT KEY HERE"; ?>
