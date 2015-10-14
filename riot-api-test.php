@@ -31,6 +31,14 @@ function summoner_info_array_name($summoner){
 	return $summoner_nospaces;
 }
 
+function summoner_id_from_name($summoner, $server){
+
+$summoner_info = summoner_name($summoner, $server);
+$summoner_info_array = json_decode($summoner_info, true);
+$summoner_info_array_name = summoner_info_array_name($summoner);
+$summoner_id = $summoner_info_array[$summoner_info_array_name]['id'];
+return $summoner_id;
+}
 
 
 class riot_api_test_widget extends WP_Widget {
@@ -66,11 +74,7 @@ echo __( 'Hello, World!', 'riot_api_test_widget_domain' );
 $summoner = 'Vadilli';
 $server = 'euw';
 
-$summoner_info = summoner_name($summoner, $server);
-$summoner_info_array = json_decode($summoner_info, true);
-$summoner_info_array_name = summoner_info_array_name($summoner);
-$summoner_id = $summoner_info_array[$summoner_info_array_name]['id'];
-
+$summoner_id = summoner_id_from_name($summoner, $server);
 
 
 echo($summoner_id);
