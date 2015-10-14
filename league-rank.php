@@ -14,18 +14,18 @@ include("riot-api-key.php");
 include("api-functions.php");
 
 
-class riot_api_test_widget extends WP_Widget {
+class league_rank_widget extends WP_Widget {
 
 function __construct() {
 parent::__construct(
 // Base ID of your widget
-'riot_api_test_widget', 
+'league_rank_widget', 
 
 // Widget name will appear in UI
-__('Riot API Test', 'riot_api_test_widget_domain'), 
+__('League of Legends Rank', 'league_rank_widget_domain'), 
 
 // Widget description
-array( 'description' => __( 'Testing Riot API Key', 'riot_api_test_widget_domain' ), ) 
+array( 'description' => __( 'Widget to display League of Legends Ranking', 'league_rank_widget_domain' ), ) 
 );
 }
 
@@ -64,21 +64,21 @@ if ( isset( $instance[ 'title' ] ) ) {
 $title = $instance[ 'title' ];
 }
 else {
-$title = __( 'New title', 'riot_api_test_widget_domain' );
+$title = __( 'New title', 'league_rank_widget_domain' );
 }
 
 if ( isset( $instance[ 'summonername' ] ) ) {
 $summonername = $instance[ 'summonername' ];
 }
 else {
-$summonername = __( 'New summonername', 'riot_api_test_widget_domain' );
+$summonername = __( 'New summonername', 'league_rank_widget_domain' );
 }
 
 if ( isset( $instance[ 'server' ] ) ) {
 $server = $instance[ 'server' ];
 }
 else {
-$server = __( 'New server', 'riot_api_test_widget_domain' );
+$server = __( 'New server', 'league_rank_widget_domain' );
 }
 
 // Widget admin form
@@ -109,11 +109,11 @@ return $instance;
 }
 
 
-} // Class riot_api_test_widget ends here
+} // Class league_rank_widget ends here
 
 
 // Register and load the widget
-function riot_api_test_load_widget() {
-	register_widget( 'riot_api_test_widget' );
+function league_rank_load_widget() {
+	register_widget( 'league_rank_widget' );
 }
-add_action( 'widgets_init', 'riot_api_test_load_widget' );
+add_action( 'widgets_init', 'league_rank_load_widget' );
