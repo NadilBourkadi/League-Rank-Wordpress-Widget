@@ -24,6 +24,13 @@ curl_close($curl);
 return $result;
 }
 
+// converts summoner name so we can address the individual array we want to pull an ID from
+function summoner_info_array_name($summoner){
+	$summoner_lower = mb_strtolower($summoner, 'UTF-8');
+	$summoner_nospaces = str_replace(' ', '', $summoner_lower);
+	return $summoner_nospaces;
+}
+
 
 
 class riot_api_test_widget extends WP_Widget {
@@ -55,13 +62,18 @@ echo $args['before_title'] . $title . $args['after_title'];
 
 // This is where you run the code and display the output
 echo __( 'Hello, World!', 'riot_api_test_widget_domain' );
-$summoner_info = summoner_name($summoner, $server);
-$summoner_info_array = json_decode($summoner_info, true);
 
 $summoner = 'Vadilli';
 $server = 'euw';
 
-print_r(summoner_name($summoner, $server));
+$summoner_info = summoner_name($summoner, $server);
+$summoner_info_array = json_decode($summoner_info, true);
+$summoner_info_array_name = summoner_info_array_name($summoner);
+$summoner_id = $summoner_info_array[$summoner_info_array_name]['id'];
+
+
+
+echo($summoner_id);
 
 echo $riot_api_key;
 
