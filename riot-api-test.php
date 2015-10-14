@@ -41,6 +41,20 @@ return $summoner_id;
 }
 
 
+
+function summoner_by_id_array($summoner_id, $server){
+
+global $riot_api_key;
+$curl = curl_init('https://' . $server . '.api.pvp.net/api/lol/' . $server . '/v2.5/league/by-summoner/' . $summoner_id . '/entry?api_key=' . $riot_api_key);
+curl_setopt($curl, CURLOPT_RETURNTRANSFER, 1);
+$result = curl_exec($curl);
+curl_close($curl);
+$decoded_result = json_decode($result, true);
+return $decoded_result;
+
+}
+
+
 class riot_api_test_widget extends WP_Widget {
 
 function __construct() {
@@ -69,17 +83,18 @@ echo $args['before_title'] . $title . $args['after_title'];
 
 
 // This is where you run the code and display the output
-echo __( 'Hello, World!', 'riot_api_test_widget_domain' );
 
 $summoner = 'Vadilli';
 $server = 'euw';
 
 $summoner_id = summoner_id_from_name($summoner, $server);
-
-
-echo($summoner_id);
-
-echo $riot_api_key;
+$league = summoner_by_id_array($summoner_id, $server);
+// print_r($league[$summoner_id][0]);
+echo('<p>');
+echo('<strong>Summoner Name:</strong> ' . $league[$summoner_id][0][entries][0][playerOrTeamName] . '<br>');
+echo('<strong>League:</strong> ' . $league[$summoner_id][0][tier] . ' ' . $league[$summoner_id][0][entries][0][division] . '<br>');
+echo('<strong>Win/Loss:</strong> ' . $league[$summoner_id][0][entries][0][wins] . ' / ' . $league[$summoner_id][0][entries][0][losses]);
+echo('</p>');
 
 
 
