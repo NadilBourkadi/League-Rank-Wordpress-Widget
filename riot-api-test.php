@@ -8,10 +8,11 @@ Author: Nadil Bourkadi
 Author URI: nadil.co.uk
 License: GPL2
 */
-// Creating the widget 
+
+// file only contains riot api key in $riot_api_key variable
 include("riot-api-key.php");
 
-
+// uses summoner name on /summoner/by-name/ endpoint and returns the result
 function summoner_name($summoner, $server) {
 
 global $riot_api_key;
@@ -31,6 +32,8 @@ function summoner_info_array_name($summoner){
 	return $summoner_nospaces;
 }
 
+// makes api request using summoner_name function, addresses json_decod(ed) array using 
+// result of summoner_info_array_name, and returns associated summoner ID 
 function summoner_id_from_name($summoner, $server){
 
 $summoner_info = summoner_name($summoner, $server);
@@ -40,8 +43,8 @@ $summoner_id = $summoner_info_array[$summoner_info_array_name]['id'];
 return $summoner_id;
 }
 
-
-
+// uses ID to make a request o the /league/by-summoner/ endpoint and returns the
+// json_decode(ed) result
 function summoner_by_id_array($summoner_id, $server){
 
 global $riot_api_key;
@@ -73,28 +76,27 @@ array( 'description' => __( 'Testing Riot API Key', 'riot_api_test_widget_domain
 // Creating widget front-end
 // This is where the action happens
 public function widget( $args, $instance ) {
+
+//grabbing instance variables entered in backend
 $title = apply_filters( 'widget_title', $instance['title'] );
 $summonername = $instance['summonername'];
 $server = $instance['server'];
-// before and after widget arguments are defined by themes
+
+
 echo $args['before_widget'];
 if ( ! empty( $title ) )
 echo $args['before_title'] . $title . $args['after_title'];
 
-
-
-
-// This is where you run the code and display the output
-
-// $summoner = 'Vadilli';
-// $server = 'euw';
-
+// summoner_id_from_name uses the provided summoner name and server to make request and grab ID
+// summoner_by_id_array makes a request using this ID and saves it to the $league variable for display
 $summoner_id = summoner_id_from_name($summonername, $server);
 $league = summoner_by_id_array($summoner_id, $server);
+
 // print_r($league[$summoner_id][0]);
 echo('<p>');
 echo('<strong>Summoner Name:</strong> ' . $league[$summoner_id][0][entries][0][playerOrTeamName] . '<br>');
 echo('<strong>League:</strong> ' . $league[$summoner_id][0][tier] . ' ' . $league[$summoner_id][0][entries][0][division] . '<br>');
+echo('<strong>Points:</strong> ' . $league[$summoner_id][0][entries][0][leaguePoints] . ' </br>');
 echo('<strong>Win/Loss:</strong> ' . $league[$summoner_id][0][entries][0][wins] . ' / ' . $league[$summoner_id][0][entries][0][losses]);
 echo('</p>');
 
@@ -117,6 +119,13 @@ $summonername = $instance[ 'summonername' ];
 }
 else {
 $summonername = __( 'New summonername', 'riot_api_test_widget_domain' );
+}
+
+if ( isset( $instance[ 'server' ] ) ) {
+$server = $instance[ 'server' ];
+}
+else {
+$server = __( 'New server', 'riot_api_test_widget_domain' );
 }
 
 
