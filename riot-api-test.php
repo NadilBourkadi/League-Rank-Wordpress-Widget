@@ -74,6 +74,8 @@ array( 'description' => __( 'Testing Riot API Key', 'riot_api_test_widget_domain
 // This is where the action happens
 public function widget( $args, $instance ) {
 $title = apply_filters( 'widget_title', $instance['title'] );
+$summonername = $instance['summonername'];
+$server = $instance['server'];
 // before and after widget arguments are defined by themes
 echo $args['before_widget'];
 if ( ! empty( $title ) )
@@ -84,10 +86,10 @@ echo $args['before_title'] . $title . $args['after_title'];
 
 // This is where you run the code and display the output
 
-$summoner = 'Vadilli';
-$server = 'euw';
+// $summoner = 'Vadilli';
+// $server = 'euw';
 
-$summoner_id = summoner_id_from_name($summoner, $server);
+$summoner_id = summoner_id_from_name($summonername, $server);
 $league = summoner_by_id_array($summoner_id, $server);
 // print_r($league[$summoner_id][0]);
 echo('<p>');
@@ -110,13 +112,29 @@ else {
 $title = __( 'New title', 'riot_api_test_widget_domain' );
 }
 
+if ( isset( $instance[ 'summonername' ] ) ) {
+$summonername = $instance[ 'summonername' ];
+}
+else {
+$summonername = __( 'New summonername', 'riot_api_test_widget_domain' );
+}
+
 
 // Widget admin form
 ?>
 <p>
 <label for="<?php echo $this->get_field_id( 'title' ); ?>"><?php _e( 'Title:' ); ?></label> 
 <input class="widefat" id="<?php echo $this->get_field_id( 'title' ); ?>" name="<?php echo $this->get_field_name( 'title' ); ?>" type="text" value="<?php echo esc_attr( $title ); ?>" />
-</p>
+
+<label for="<?php echo $this->get_field_id( 'summonername' ); ?>"><?php _e( 'Summonder Name:' ); ?></label> 
+<input class="widefat" id="<?php echo $this->get_field_id( 'summonername' ); ?>" name="<?php echo $this->get_field_name( 'summonername' ); ?>" type="text" value="<?php echo esc_attr( $summonername ); ?>" />
+
+<label for="<?php echo $this->get_field_id( 'server' ); ?>"><?php _e( 'Server:' ); ?></label> 
+<select id="<?php echo $this->get_field_id('server'); ?>" name="<?php echo $this->get_field_name('server'); ?>" class="widefat" style="width:100%;">
+    <option <?php selected( $instance['server'], 'euw'); ?> value="euw">EUW</option>
+    <option <?php selected( $instance['server'], 'na'); ?> value="na">NA</option>   
+</select>
+
 <?php 
 }
 	
@@ -124,6 +142,8 @@ $title = __( 'New title', 'riot_api_test_widget_domain' );
 public function update( $new_instance, $old_instance ) {
 $instance = array();
 $instance['title'] = ( ! empty( $new_instance['title'] ) ) ? strip_tags( $new_instance['title'] ) : '';
+$instance['summonername'] = ( ! empty( $new_instance['summonername'] ) ) ? strip_tags( $new_instance['summonername'] ) : '';
+$instance['server'] = ( ! empty( $new_instance['server'] ) ) ? strip_tags( $new_instance['server'] ) : '';
 return $instance;
 }
 
